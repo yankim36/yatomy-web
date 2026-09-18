@@ -4,7 +4,7 @@
  * Render the landing pages to static HTML for preview or a static fallback deploy.
  *
  * Usage:
- *   php bin/build-static.php                       # relative links, for opening dist/index.html locally
+ *   php bin/build-static.php                       # relative links (…/index.html), for local or any static host
  *   php bin/build-static.php --base=https://yatomy.com          # real domain in canonical/hreflang
  *   php bin/build-static.php --cta=https://...                    # override the built-in Easy Registration link
  *   php bin/build-static.php --out=/path/to/dir
@@ -32,12 +32,12 @@ foreach ( $content['pages'] as $key => $page ) {
 	foreach ( array_keys( $content['languages'] ) as $lang ) {
 		$alternates = array();
 		foreach ( array_keys( $content['languages'] ) as $alt ) {
-			$alternates[ $alt ] = $base !== '' ? "$base/$alt/$slug/" : "../../$alt/$slug/";
+			$alternates[ $alt ] = $base !== '' ? "$base/$alt/$slug/" : "../../$alt/$slug/index.html";
 		}
 		$ctx = array(
 			'cta_url'    => $cta,
 			'site_name'  => $site,
-			'home_url'   => $base !== '' ? "$base/" : '../../',
+			'home_url'   => $base !== '' ? "$base/" : '../../index.html',
 			'canonical'  => $base !== '' ? "$base/$lang/$slug/" : '',
 			'alternates' => $alternates,
 		);
@@ -57,7 +57,7 @@ $rows = '';
 foreach ( $content['pages'] as $key => $page ) {
 	$rows .= '<tr><td><strong>' . htmlspecialchars( $page['qr'] ) . '</strong><br><small>' . htmlspecialchars( $page['en']['title'] ) . '</small></td>';
 	foreach ( array_keys( $content['languages'] ) as $lang ) {
-		$rows .= '<td><a href="' . $lang . '/' . $page['default_slug'] . '/">/' . $lang . '/' . $page['default_slug'] . '/</a></td>';
+		$rows .= '<td><a href="' . $lang . '/' . $page['default_slug'] . '/index.html">/' . $lang . '/' . $page['default_slug'] . '/</a></td>';
 	}
 	$rows .= '</tr>';
 }

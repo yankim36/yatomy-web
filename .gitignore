@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Build output from bin/build-static.php (regenerate anytime)
+dist/
+
+# Packaged plugin zips
+*.zip

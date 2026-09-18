@@ -84,7 +84,7 @@ php bin/build-static.php --base=https://yatomy.com
 ## Yan 확인 필요 사항
 
 - [x] **Easy Registration 링크** — `https://us.atomy.com/gate/join/easyreg/v2/22457174` (플러그인 기본값으로 반영)
-- [ ] **최종 슬러그** — 기본값 `start` / `products` / `business` (대안 `opportunity` / `quality` / `freedom`은 설정에서 변경)
+- [x] **최종 슬러그** — `start` / `products` / `business` 확정 (필요 시 설정에서 변경 가능)
 - [ ] **기존 테마 스타일 가이드** — 현재는 블루/화이트 제안값. 브랜드 색상이 있으면 `:root` 변수만 교체
 - [ ] **도메인 구조** — 현재 서브경로(`/en/`, `/kr/`) 방식. 서브도메인이 필요하면 별도 설정 필요
 - [ ] 푸터 문구("독립 회원이 운영") 유지 여부 및 og:image 이미지

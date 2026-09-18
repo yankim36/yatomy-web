@@ -36,8 +36,8 @@
 2. 워드프레스 관리자 → 플러그인 → 새로 추가 → 플러그인 업로드 → zip 업로드 후 **활성화**.
    (또는 Hostinger 파일 관리자/FTP로 `wp-content/plugins/`에 폴더째 업로드)
 3. 설정 → 고유주소(Permalinks)가 "일반(Plain)"이 아닌지 확인합니다. Plain이면 "글 이름"으로 바꾸고 저장.
-4. 설정 → **Atomy QR Landing** 에서 **Easy Registration URL**을 입력하고 저장합니다.
-   입력 전까지는 버튼이 플레이스홀더 링크를 가리키고, 관리자에게만 경고 배너가 표시됩니다.
+4. (선택) 설정 → **Atomy QR Landing** 에서 슬러그, 브랜드명, 분석 스니펫 등을 조정합니다.
+   Easy Registration 링크(`https://us.atomy.com/gate/join/easyreg/v2/22457174`)는 플러그인에 기본값으로 들어 있어 별도 입력이 필요 없습니다.
 5. `/en/start/`, `/kr/start/` 등 6개 URL을 휴대폰으로 열어 확인한 뒤, `docs/qr-mapping.md`대로 QR 목적지를 교체합니다.
 
 Hostinger LiteSpeed 캐시를 쓰는 경우: 언어별 URL(`/en/...`, `/kr/...`)은 캐시해도 안전합니다.
@@ -46,7 +46,7 @@ Hostinger LiteSpeed 캐시를 쓰는 경우: 언어별 URL(`/en/...`, `/kr/...`)
 
 ## 설정 항목 (설정 → Atomy QR Landing)
 
-- **Easy Registration URL** — 모든 CTA 버튼의 목적지. 페이지별 개별 링크가 필요하면 각 페이지 override 칸 사용.
+- **Easy Registration URL** — 비워 두면 기본값 `https://us.atomy.com/gate/join/easyreg/v2/22457174`. 다른 링크로 바꾸거나 페이지별로 다르게 하려면 여기에 입력.
 - **페이지 슬러그** — 기본값 `start` / `products` / `business`. 화면에 현재 도메인 기준 URL이 표시됨.
 - **언어 자동 감지** — 끄면 `/start/`가 항상 `/en/`으로 이동.
 - **브랜드명 / 브랜드 링크** — 상단 좌측 로고 텍스트(기본 `YAtomy`)와 링크.
@@ -68,10 +68,10 @@ php bin/build-static.php                 # dist/ 에 6개 페이지 + index.html
 npx serve dist                           # 또는 python3 -m http.server -d dist 8000
 ```
 
-실제 도메인과 CTA 링크를 넣어 정적 HTML로 뽑을 수도 있습니다 (정적 호스팅 대체 배포용):
+실제 도메인을 넣어 정적 HTML로 뽑을 수도 있습니다 (정적 호스팅 대체 배포용, `--cta=`로 링크 교체 가능):
 
 ```bash
-php bin/build-static.php --base=https://yatomy.com --cta=https://<easy-registration-link>
+php bin/build-static.php --base=https://yatomy.com
 ```
 
 ## 디자인
@@ -83,7 +83,7 @@ php bin/build-static.php --base=https://yatomy.com --cta=https://<easy-registrat
 
 ## Yan 확인 필요 사항
 
-- [ ] **Easy Registration 실제 링크** → 설정 화면에 입력 (현재 플레이스홀더)
+- [x] **Easy Registration 링크** — `https://us.atomy.com/gate/join/easyreg/v2/22457174` (플러그인 기본값으로 반영)
 - [ ] **최종 슬러그** — 기본값 `start` / `products` / `business` (대안 `opportunity` / `quality` / `freedom`은 설정에서 변경)
 - [ ] **기존 테마 스타일 가이드** — 현재는 블루/화이트 제안값. 브랜드 색상이 있으면 `:root` 변수만 교체
 - [ ] **도메인 구조** — 현재 서브경로(`/en/`, `/kr/`) 방식. 서브도메인이 필요하면 별도 설정 필요

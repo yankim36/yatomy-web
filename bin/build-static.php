@@ -5,7 +5,8 @@
  *
  * Usage:
  *   php bin/build-static.php                       # relative links, for opening dist/index.html locally
- *   php bin/build-static.php --base=https://yatomy.com --cta=https://.../easy-registration
+ *   php bin/build-static.php --base=https://yatomy.com          # real domain in canonical/hreflang
+ *   php bin/build-static.php --cta=https://...                    # override the built-in Easy Registration link
  *   php bin/build-static.php --out=/path/to/dir
  *
  * Output: {out}/{lang}/{slug}/index.html for every page × language, plus {out}/index.html.
@@ -19,7 +20,7 @@ $content = require $plugin . '/includes/content.php';
 
 $opts = getopt( '', array( 'base::', 'cta::', 'out::', 'site::' ) );
 $base = isset( $opts['base'] ) ? rtrim( $opts['base'], '/' ) : '';
-$cta  = isset( $opts['cta'] ) && $opts['cta'] !== '' ? $opts['cta'] : 'https://REPLACE-WITH-ATOMY-EASY-REGISTRATION-LINK';
+$cta  = isset( $opts['cta'] ) && $opts['cta'] !== '' ? $opts['cta'] : 'https://us.atomy.com/gate/join/easyreg/v2/22457174';
 $out  = isset( $opts['out'] ) ? rtrim( $opts['out'], '/' ) : $root . '/dist';
 $site = isset( $opts['site'] ) ? $opts['site'] : 'YAtomy';
 

@@ -20,7 +20,6 @@ class Atomy_QR_Landing_Settings {
 		$this->plugin = $plugin;
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_init', array( $this, 'register' ) );
-		add_action( 'admin_notices', array( $this, 'placeholder_notice' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( ATOMY_QRL_FILE ), array( $this, 'action_links' ) );
 	}
 
@@ -39,19 +38,6 @@ class Atomy_QR_Landing_Settings {
 		return $links;
 	}
 
-	public function placeholder_notice() {
-		if ( ! current_user_can( 'manage_options' ) || ! $this->plugin->cta_is_placeholder() ) {
-			return;
-		}
-		$screen = get_current_screen();
-		if ( $screen && 'settings_page_' . self::PAGE === $screen->id ) {
-			return;
-		}
-		echo '<div class="notice notice-warning"><p><strong>' . esc_html__( 'Atomy QR Landing:', 'atomy-qr-landing' ) . '</strong> '
-			. esc_html__( 'the Easy Registration link is not set yet, so the landing page CTA buttons point to a placeholder.', 'atomy-qr-landing' )
-			. ' <a href="' . esc_url( admin_url( 'options-general.php?page=' . self::PAGE ) ) . '">' . esc_html__( 'Add the link', 'atomy-qr-landing' ) . '</a></p></div>';
-	}
-
 	public function register() {
 		register_setting(
 			'atomy_qrl',
@@ -64,7 +50,7 @@ class Atomy_QR_Landing_Settings {
 		);
 
 		add_settings_section( 'cta', __( 'Call to action (Easy Registration)', 'atomy-qr-landing' ), array( $this, 'section_cta' ), self::PAGE );
-		$this->field( 'cta', 'cta_url', __( 'Easy Registration URL (all pages)', 'atomy-qr-landing' ), 'url', __( 'The link every CTA button opens. Leave the per-page fields empty unless one page needs a different link.', 'atomy-qr-landing' ) );
+		$this->field( 'cta', 'cta_url', __( 'Easy Registration URL (all pages)', 'atomy-qr-landing' ), 'url', sprintf( __( 'The link every CTA button opens. Empty = built-in default <code>%s</code>. Leave the per-page fields empty unless one page needs a different link.', 'atomy-qr-landing' ), esc_html( ATOMY_QRL_DEFAULT_CTA_URL ) ) );
 		foreach ( $this->plugin->content()['pages'] as $key => $page ) {
 			/* translators: %s: QR label, e.g. "QR 1 — Combined" */
 			$this->field( 'cta', 'cta_url_' . $key, sprintf( __( 'Override for %s', 'atomy-qr-landing' ), $page['qr'] ), 'url' );
@@ -116,7 +102,7 @@ class Atomy_QR_Landing_Settings {
 	}
 
 	public function section_cta() {
-		echo '<p>' . esc_html__( 'Paste the Atomy Easy Registration link here once it is confirmed. Until then the buttons point to a visible placeholder and an admin notice is shown.', 'atomy-qr-landing' ) . '</p>';
+		echo '<p>' . esc_html__( 'The Atomy Easy Registration link is built in, so nothing needs to be entered here. Fill these fields only to override it (for example with a different sponsor link).', 'atomy-qr-landing' ) . '</p>';
 	}
 
 	public function section_urls() {

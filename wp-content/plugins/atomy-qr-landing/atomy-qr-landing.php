@@ -22,7 +22,7 @@ define( 'ATOMY_QRL_FILE', __FILE__ );
 define( 'ATOMY_QRL_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ATOMY_QRL_OPTION', 'atomy_qrl_settings' );
 define( 'ATOMY_QRL_FLUSH_FLAG', 'atomy_qrl_flush_rewrites' );
-define( 'ATOMY_QRL_CTA_PLACEHOLDER', 'https://REPLACE-WITH-ATOMY-EASY-REGISTRATION-LINK' );
+define( 'ATOMY_QRL_DEFAULT_CTA_URL', 'https://us.atomy.com/gate/join/easyreg/v2/22457174' );
 
 require_once ATOMY_QRL_DIR . 'includes/class-renderer.php';
 require_once ATOMY_QRL_DIR . 'includes/class-settings.php';
@@ -129,7 +129,7 @@ final class Atomy_QR_Landing {
 		return home_url( '/' . $this->slug_for( $page_key ) . '/' );
 	}
 
-	/** Effective CTA URL for a page: per-page override → global → placeholder. */
+	/** Effective CTA URL for a page: per-page override → global setting → built-in default. */
 	public function cta_url( $page_key ) {
 		$s   = $this->settings();
 		$url = '';
@@ -139,7 +139,7 @@ final class Atomy_QR_Landing {
 			$url = $s['cta_url'];
 		}
 		if ( '' === $url ) {
-			$url = ATOMY_QRL_CTA_PLACEHOLDER;
+			$url = ATOMY_QRL_DEFAULT_CTA_URL;
 		}
 		/**
 		 * Filter the CTA URL per page (e.g. to append tracking parameters).
@@ -148,19 +148,6 @@ final class Atomy_QR_Landing {
 		 * @param string $page_key start | products | business
 		 */
 		return apply_filters( 'atomy_qrl_cta_url', $url, $page_key );
-	}
-
-	public function cta_is_placeholder() {
-		$s = $this->settings();
-		if ( ! empty( $s['cta_url'] ) ) {
-			return false;
-		}
-		foreach ( $this->page_keys() as $key ) {
-			if ( empty( $s[ 'cta_url_' . $key ] ) ) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/* ---------------------------------------------------------------------
@@ -269,14 +256,6 @@ final class Atomy_QR_Landing {
 			$alternates[ $code ] = $this->url( $page_key, $code );
 		}
 
-		$notice = '';
-		if ( $this->cta_is_placeholder() && current_user_can( 'manage_options' ) ) {
-			$notice = '<div class="notice"><div class="wrap">'
-				. esc_html__( 'Admin only: the Easy Registration link is not set yet. The CTA buttons point to a placeholder.', 'atomy-qr-landing' )
-				. ' <a href="' . esc_url( admin_url( 'options-general.php?page=atomy-qr-landing' ) ) . '">' . esc_html__( 'Set it now', 'atomy-qr-landing' ) . '</a>'
-				. '</div></div>';
-		}
-
 		$ctx = array(
 			'cta_url'     => $this->cta_url( $page_key ),
 			'site_name'   => $s['site_name'] !== '' ? $s['site_name'] : 'YAtomy',
@@ -286,7 +265,7 @@ final class Atomy_QR_Landing {
 			'og_image'    => $s['og_image'],
 			'head_extra'  => (string) $s['head_extra'],
 			'footer_text' => (string) $s[ 'footer_' . $lang ],
-			'notice'      => $notice,
+			'notice'      => '',
 			'version'     => ATOMY_QRL_VERSION,
 		);
 
